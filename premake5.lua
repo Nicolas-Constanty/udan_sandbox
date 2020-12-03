@@ -20,7 +20,8 @@ workspace "UdanSandbox"
     -- Graphic library
     defines { "BUILD_GLFW" }
 
-    defines { "USE_SPDLOG"}
+    defines { "USE_SPDLOG" }
+    -- defines { "PRINT_LINE" }
 
     filter "Debug"
         defines { "DEBUG" }
