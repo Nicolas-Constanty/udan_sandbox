@@ -17,7 +17,7 @@ workspace "UdanSandbox"
 
     -- Log library
     defines { "BUILD_LOGURU", "BUILD_SPDLOG" }
-    -- Graphic library
+    -- Window library
     defines { "BUILD_GLFW" }
 
     defines { "USE_SPDLOG" }
@@ -43,6 +43,8 @@ group "Udan Engine"
     filter "BUILD_GLFW"
         include "Udan/udan_glfw"
 
+group "Unit Test"
+    include "Tests/core_test"
 
 group ""
 
