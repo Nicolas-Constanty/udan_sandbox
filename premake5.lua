@@ -57,7 +57,7 @@ project "udan_sandbox"
         "includes/**.h"
     }
 
-    links { "udan_core", "udan_debug", "udan_ecs", "udan_window" }
+    links { "udan_core", "udan_debug", "udan_ecs", "udan_window", "Winmm" }
 
     includedirs {
         "include", 
