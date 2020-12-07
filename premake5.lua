@@ -35,6 +35,7 @@ group "Udan Engine"
     include "Udan/udan_core"
     include "Udan/udan_debug"
     include "Udan/udan_ecs"
+    include "Udan/udan_utils"
     include "Udan/udan_window"
     -- Log lib
     --filter "BUILD_LOGURU"
@@ -61,7 +62,7 @@ project "udan_sandbox"
         "include/**.h"
     }
 
-    links { "udan_core", "udan_debug", "udan_ecs", "udan_window", "Winmm" }
+    links { "udan_core", "udan_debug", "udan_ecs", "udan_window", "Winmm", "udan_utils" }
 
     includedirs {
         "include", 
@@ -69,6 +70,7 @@ project "udan_sandbox"
         "Udan/udan_debug/include/",
         "Udan/udan_ecs/include/",
         "Udan/udan_window/include/",
+        "Udan/udan_utils/include/",
 
         "Udan/ThirdParties/SpdLog/include"
     }
