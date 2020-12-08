@@ -106,48 +106,8 @@ void print_task_id(int sec)
 
 int main(int argc, char* argv[])
 {
-	/*Application application(argc, argv);
+	Application application(argc, argv);
 	application.Init(argc, argv);
 	application.Run();
-	return 0;*/
-
-	//std::thread consumers[10], producers[10];
-	//// spawn 10 consumers and 10 producers:
-	//for (int i = 0; i < 10; ++i) {
-	//	consumers[i] = std::thread(consumer);
-	//	producers[i] = std::thread(producer, i + 1);
-	//}
-
-	//// join them back:
-	//for (int i = 0; i < 10; ++i) {
-	//	producers[i].join();
-	//	consumers[i].join();
-	//}
-
-	//Application application(argc, argv);
-
-	udan::utils::DependencyTask *t1 = new udan::utils::DependencyTask([]() { print_task_id(1); });
-	udan::utils::DependencyTask *t2 = new udan::utils::DependencyTask([]() { print_task_id(1); });//
-	udan::utils::DependencyTask *t3 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {t1}, udan::utils::TaskPriority::LOW);//, {&t1});
-	udan::utils::DependencyTask *t4 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {t3, t2}, udan::utils::TaskPriority::HIGH);//, { &t3, &t2 });
-	udan::utils::DependencyTask* t5 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {t4}, udan::utils::TaskPriority::CRITICAL);//, { &t4 });
-	udan::utils::DependencyTask *t6 = new udan::utils::DependencyTask([]() { print_task_id(1); });
-
-	std::vector<udan::utils::ATask*> tasks;
-
-	tasks.push_back(t1);
-	tasks.push_back(t2);
-	tasks.push_back(t3);
-	tasks.push_back(t4);
-	tasks.push_back(t5);
-	tasks.push_back(t6);
-
-	udan::utils::ThreadPool thread_pool(4);
-	Sleep(1000);
-	for (const auto& task: tasks)
-	{
-		thread_pool.Schedule(task);
-	}
-	thread_pool.StopWhenQueueEmpty();
 	return 0;
 }
