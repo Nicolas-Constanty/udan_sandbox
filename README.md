@@ -8,3 +8,6 @@ cd udan_sandbox
 .\build.bat
 ```
 Then Open the .sln in Visual Studio 2019, it shoud be ready to build.
+
+### PREMAKE CONFIG
+* **defines { "PRINT_LINE" }** *Uncomment this to print log with file and line*
