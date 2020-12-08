@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "udan/debug/Logger.h"
+#include "udan/utils/Event.h"
 #include "udan/utils/ThreadPool.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -92,6 +93,25 @@ namespace UtilsTest
 			Assert::IsTrue(m_results[2] == 9);
 			Assert::IsTrue(m_results[3] == 45);
 			Assert::IsTrue(m_results[4] == 42);
+		}
+
+		int m_resultsEvent[4] = {0,0,0,0};
+
+		void AssertResult(int count)
+		{
+			Assert::IsTrue(m_resultsEvent[count] == count);
+		}
+		TEST_METHOD(EventRegister)
+		{
+			udan::utils::Event<int> on_count;
+
+			on_count += [this](int count) { m_resultsEvent[count] = count; };
+			on_count.Register([this](int value) { AssertResult(value); });
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				on_count.Invoke(i);
+			}
 		}
 	};
 }

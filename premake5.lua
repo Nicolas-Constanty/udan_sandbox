@@ -21,7 +21,7 @@ workspace "UdanSandbox"
     defines { "BUILD_GLFW" }
 
     defines { "USE_SPDLOG" }
-    -- defines { "PRINT_LINE" 
+    -- defines { "PRINT_LINE" }
 
     defines { "ENTITY_CAPACITY=1000000" }
 
