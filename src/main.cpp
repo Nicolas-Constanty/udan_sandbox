@@ -101,7 +101,7 @@
 
 void print_task_id(int sec)
 {
-	Sleep(sec * 1000);
+	//Sleep(sec * 1000);
 }
 
 int main(int argc, char* argv[])
@@ -128,9 +128,9 @@ int main(int argc, char* argv[])
 
 	udan::utils::DependencyTask *t1 = new udan::utils::DependencyTask([]() { print_task_id(1); });
 	udan::utils::DependencyTask *t2 = new udan::utils::DependencyTask([]() { print_task_id(1); });//
-	udan::utils::DependencyTask *t3 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {}, udan::utils::TaskPriority::LOW);//, {&t1});
-	udan::utils::DependencyTask *t4 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {}, udan::utils::TaskPriority::HIGH);//, { &t3, &t2 });
-	udan::utils::DependencyTask* t5 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {}, udan::utils::TaskPriority::CRITICAL);//, { &t4 });
+	udan::utils::DependencyTask *t3 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {t1}, udan::utils::TaskPriority::LOW);//, {&t1});
+	udan::utils::DependencyTask *t4 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {t3, t2}, udan::utils::TaskPriority::HIGH);//, { &t3, &t2 });
+	udan::utils::DependencyTask* t5 = new udan::utils::DependencyTask([]() { print_task_id(1); }, {t4}, udan::utils::TaskPriority::CRITICAL);//, { &t4 });
 	udan::utils::DependencyTask *t6 = new udan::utils::DependencyTask([]() { print_task_id(1); });
 
 	std::vector<udan::utils::ATask*> tasks;
@@ -148,7 +148,6 @@ int main(int argc, char* argv[])
 	{
 		thread_pool.Schedule(task);
 	}
-	Sleep(10000);
-	thread_pool.Stop();
+	thread_pool.StopWhenQueueEmpty();
 	return 0;
 }

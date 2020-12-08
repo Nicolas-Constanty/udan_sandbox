@@ -15,8 +15,6 @@ namespace CoreTest
 		{
 			float acc = accuracy / 100.f;
 			acc = 1 - acc;
-			if (udan::debug::Logger::Instance() == nullptr)
-				udan::debug::Logger::init();
 			udan::core::GameClock gc(target);
 			float totaltime = 0;
 			float time = 0;

@@ -46,8 +46,9 @@ group "Udan Engine"
     filter "BUILD_GLFW"
         include "Udan/udan_glfw"
 
-group "Unit Test"
+group "Unit Tests"
     include "Tests/core_test"
+    include "Tests/utils_test"
 
 group ""
 
