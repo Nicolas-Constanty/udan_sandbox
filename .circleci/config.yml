@@ -19,5 +19,5 @@ jobs:
       - run:
           name: "Build"
           shell: powershell.exe
-          command: msbuild.exe UdanSandbox.sln /t:Clean,Build /p:Configuration=Release /p:Platform=x64
+          command: msbuild.exe UdanSandbox.sln /m:4 /t:Clean,Build /p:Configuration=Release /p:Platform=x64
 
