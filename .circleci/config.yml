@@ -10,6 +10,8 @@ jobs:
       shell: powershell.exe
     steps:
       - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
       - run:
           name: "Premake"
           shell: powershell.exe
