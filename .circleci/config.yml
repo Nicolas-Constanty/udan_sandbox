@@ -1,0 +1,23 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.2.0
+
+jobs:
+  build:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init --recursive
+      - run:
+          name: "Premake"
+          shell: powershell.exe
+          command: .\build.bat
+      - run:
+          name: "Build"
+          shell: powershell.exe
+          command: msbuild.exe UdanSandbox.sln /m:4 /t:Clean,Build /p:Configuration=Release /p:Platform=x64
+
