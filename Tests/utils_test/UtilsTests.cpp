@@ -17,10 +17,10 @@ namespace UtilsTest
 			
 			udan::utils::ThreadPool thread_pool(4);
 			
-			udan::utils::Task* t1 = new udan::utils::Task([&m_results]() { m_results[0] = 1; });
-			udan::utils::Task* t2 = new udan::utils::Task([&m_results]() { m_results[1] = 4; });
-			udan::utils::Task* t3 = new udan::utils::Task([&m_results]() { m_results[2] = 9; });
-			udan::utils::Task* t4 = new udan::utils::Task([&m_results]() { m_results[3] = 16; });
+			const auto t1 = std::make_shared<udan::utils::Task>([&m_results]() { m_results[0] = 1; });
+			const auto t2 = std::make_shared<udan::utils::Task>([&m_results]() { m_results[1] = 4; });
+			const auto t3 = std::make_shared<udan::utils::Task>([&m_results]() { m_results[2] = 9; });
+			const auto t4 = std::make_shared<udan::utils::Task>([&m_results]() { m_results[3] = 16; });
 
 			thread_pool.Schedule(t1);
 			thread_pool.Schedule(t2);
@@ -39,14 +39,14 @@ namespace UtilsTest
 		TEST_METHOD(ThreadpoolPriority)
 		{
 			std::vector<int> m_results;
-
+			m_results.reserve(5);
 			udan::utils::ThreadPool thread_pool(1);
 
-			udan::utils::Task* t1 = new udan::utils::Task([&m_results]() { m_results.push_back(1); }, udan::utils::TaskPriority::NORMAL);
-			udan::utils::Task* t2 = new udan::utils::Task([&m_results]() { m_results.push_back(0); }, udan::utils::TaskPriority::LOW);
-			udan::utils::Task* t3 = new udan::utils::Task([&m_results]() { m_results.push_back(2); }, udan::utils::TaskPriority::HIGH);
-			udan::utils::Task* t4 = new udan::utils::Task([&m_results]() { m_results.push_back(1); }, udan::utils::TaskPriority::NORMAL);
-			udan::utils::Task* t5 = new udan::utils::Task([&m_results]() { m_results.push_back(3); }, udan::utils::TaskPriority::CRITICAL);
+			const auto t1 = std::make_shared<udan::utils::Task>([&m_results]() { m_results.emplace_back(1); }, udan::utils::TaskPriority::NORMAL);
+			const auto t2 = std::make_shared<udan::utils::Task>([&m_results]() { m_results.emplace_back(0); }, udan::utils::TaskPriority::LOW);
+			const auto t3 = std::make_shared<udan::utils::Task>([&m_results]() { m_results.emplace_back(2); }, udan::utils::TaskPriority::HIGH);
+			const auto t4 = std::make_shared<udan::utils::Task>([&m_results]() { m_results.emplace_back(1); }, udan::utils::TaskPriority::NORMAL);
+			const auto t5 = std::make_shared<udan::utils::Task>([&m_results]() { m_results.emplace_back(3); }, udan::utils::TaskPriority::CRITICAL);
 
 			thread_pool.Schedule(t1);
 			thread_pool.Schedule(t2);
@@ -66,19 +66,20 @@ namespace UtilsTest
 		TEST_METHOD(ThreadpoolDependency)
 		{
 			std::vector<int> m_results;
-			m_results.push_back(0);
-			m_results.push_back(0);
-			m_results.push_back(0);
-			m_results.push_back(0);
-			m_results.push_back(0);
+			m_results.reserve(5);
+			m_results.emplace_back(0);
+			m_results.emplace_back(0);
+			m_results.emplace_back(0);
+			m_results.emplace_back(0);
+			m_results.emplace_back(0);
 
 			udan::utils::ThreadPool thread_pool(4);
 
-			udan::utils::DependencyTask* t1 = new udan::utils::DependencyTask([&m_results]() { m_results[0] = 3; });
-			udan::utils::DependencyTask* t2 = new udan::utils::DependencyTask([&m_results]() { m_results[1] = 5; });
-			udan::utils::DependencyTask* t3 = new udan::utils::DependencyTask([&m_results]() { m_results[2] = m_results[0] * m_results[0]; }, {t1});
-			udan::utils::DependencyTask* t4 = new udan::utils::DependencyTask([&m_results]() { m_results[3] = m_results[2] * m_results[1]; }, {t3, t2});
-			udan::utils::DependencyTask* t5 = new udan::utils::DependencyTask([&m_results]() { m_results[4] = 42; });
+			const auto t1 = std::make_shared<udan::utils::DependencyTask>([&m_results]() { m_results[0] = 3; });
+			const auto t2 = std::make_shared<udan::utils::DependencyTask>([&m_results]() { m_results[1] = 5; });
+			const auto t3 = std::make_shared<udan::utils::DependencyTask>([&m_results]() { m_results[2] = m_results[0] * m_results[0]; }, udan::utils::DependencyVector{t1});
+			const auto t4 = std::make_shared<udan::utils::DependencyTask>([&m_results]() { m_results[3] = m_results[2] * m_results[1]; }, udan::utils::DependencyVector{t3, t2});
+			const auto t5 = std::make_shared<udan::utils::DependencyTask>([&m_results]() { m_results[4] = 42; });
 
 			thread_pool.Schedule(t1);
 			thread_pool.Schedule(t2);

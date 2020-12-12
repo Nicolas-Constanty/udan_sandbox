@@ -28,6 +28,9 @@ workspace "UdanSandbox"
     filter "Debug"
         defines { "DEBUG" }
 
+    filter "Release"
+        optimize "Full"
+
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -49,6 +52,7 @@ group "Udan Engine"
 group "Unit Tests"
     include "Tests/core_test"
     include "Tests/utils_test"
+    include "Tests/ecs_test"
 
 group ""
 

@@ -12,3 +12,4 @@ Then Open the .sln in Visual Studio 2019, it shoud be ready to build.
 ### PREMAKE CONFIG
 Open **premake5.lua**, modify what you need inside, save it and run **build.bat** into a cmd.
 * **defines { "PRINT_LINE" }** *Uncomment this to print log with file and line*
+* **defines { "ENTITY_CAPACITY=1000000" }** *Define the max entity count for the application*
