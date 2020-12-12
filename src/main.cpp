@@ -169,6 +169,7 @@ void RunSystem1(int size, std::vector<Pos>& pos, const std::vector<Velocity>& ve
 		p.x += v.dx * deltaTime;
 		p.y += v.dy * deltaTime;
 		p.z += v.dz * deltaTime;
+		Sleep(200);
 	}
 }
 
@@ -182,7 +183,7 @@ void *operator new(size_t size)
 
 int main(int argc, char* argv[])
 {
-	const size_t entity_count = 100000;
+	const size_t entity_count = 50000;
 	udan::debug::Logger::Instance()->set_level(spdlog::level::info);
 	std::tuple<Pos,Velocity> c = {};
 	auto system = [&](Pos& pos, const Velocity& vel)
@@ -194,30 +195,30 @@ int main(int argc, char* argv[])
 	};
 	
 	//std::unique_ptr<TestIteratif<Pos, Velocity>> storage = std::make_unique<TestIteratif<Pos,Velocity>>(entity_count);
-	std::vector<std::unique_ptr<udan::utils::SparseSet<Entity>>> m_cache;
-	m_cache.push_back(std::make_unique<udan::utils::DataSet<Entity, Pos>>(entity_count));
-	m_cache.push_back(std::make_unique<udan::utils::DataSet<Entity, Velocity>>(entity_count));
-	{
-		const udan::utils::Timer timer;
-		udan::utils::DataSet<Entity, Pos>& pos = static_cast<udan::utils::DataSet<Entity, Pos>&>(*m_cache[0]);
-		udan::utils::DataSet<Entity, Velocity>& vel = static_cast<udan::utils::DataSet<Entity, Velocity>&>(*m_cache[1]);
-		for (auto i = 0; i < entity_count; ++i) {
-			const float val = i * 1.f;
-			pos.EmplaceBack(i, val, val, val);
-			vel.EmplaceBack(i, val, val, val);
-		}
-		const auto execTime = timer.GetDeltaTime();
-		std::cout << fmt::format("Iterative Time: (fps {}) {}s", 1.0 / execTime, execTime) << std::endl;
-	}
-	{
-		const udan::utils::Timer timer;
-		std::vector<Pos>& pos = static_cast<udan::utils::DataSet<Entity, Pos>&>(*m_cache[0]).GetData();
-		std::vector<Velocity>& vel = static_cast<udan::utils::DataSet<Entity, Velocity>&>(*m_cache[1]).GetData();
-		RunSystem<Pos&, const Velocity&>(system, entity_count, pos, vel);
+	//std::vector<std::unique_ptr<udan::utils::SparseSet<Entity>>> m_cache;
+	//m_cache.push_back(std::make_unique<udan::utils::DataSet<Entity, Pos>>(entity_count));
+	//m_cache.push_back(std::make_unique<udan::utils::DataSet<Entity, Velocity>>(entity_count));
+	//{
+	//	const udan::utils::Timer timer;
+	//	udan::utils::DataSet<Entity, Pos>& pos = static_cast<udan::utils::DataSet<Entity, Pos>&>(*m_cache[0]);
+	//	udan::utils::DataSet<Entity, Velocity>& vel = static_cast<udan::utils::DataSet<Entity, Velocity>&>(*m_cache[1]);
+	//	for (auto i = 0; i < entity_count; ++i) {
+	//		const float val = i * 1.f;
+	//		pos.EmplaceBack(i, val, val, val);
+	//		vel.EmplaceBack(i, val, val, val);
+	//	}
+	//	const auto execTime = timer.GetDeltaTime();
+	//	std::cout << fmt::format("Iterative Time: (fps {}) {}s", 1.0 / execTime, execTime) << std::endl;
+	//}
+	//{
+	//	const udan::utils::Timer timer;
+	//	std::vector<Pos>& pos = static_cast<udan::utils::DataSet<Entity, Pos>&>(*m_cache[0]).GetData();
+	//	std::vector<Velocity>& vel = static_cast<udan::utils::DataSet<Entity, Velocity>&>(*m_cache[1]).GetData();
+	//	RunSystem<Pos&, const Velocity&>(system, entity_count, pos, vel);
 
-		const auto execTime = timer.GetDeltaTime();
-		std::cout << fmt::format("Iterative Time: (fps {}) {}s", 1.0 / execTime, execTime) << std::endl;
-	}
+	//	const auto execTime = timer.GetDeltaTime();
+	//	std::cout << fmt::format("Iterative Time: (fps {}) {}s", 1.0 / execTime, execTime) << std::endl;
+	//}
 
 	udan::ecs::EntityManager<Entity> manager(entity_count);
 	udan::ecs::World<Entity> world(entity_count);
@@ -241,12 +242,13 @@ int main(int argc, char* argv[])
 		&SystemPos
 		);
 	{
+		size_t iteration = 120;
 		const udan::utils::Timer timer;
-		for (int i = 0; i < 120; ++i)
+		for (int i = 0; i < iteration; ++i)
 		{
 			world.Update();
 		}
-		const auto execTime = timer.GetDeltaTime() / 120.0;
+		const auto execTime = timer.GetDeltaTime() / (double)iteration;
 		std::cout << fmt::format("ECS Time: (fps {}) {}s", 1.0 / execTime, execTime) << std::endl;
 	}
 	/*Application application(argc, argv);
